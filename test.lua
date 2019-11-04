@@ -12,7 +12,7 @@ end
 require("stringstore")
 require("noitaglobalstore")
 
-local test = stringstore.create_store(stringstore.noita.globals)
+local test = stringstore.open_store(stringstore.noita.global("ABC"))
 
 local function testval(tab, key, val)
 	tab[key] = val
@@ -77,7 +77,7 @@ print("")
 print("VariableStorageComponent store:")
 print("")
 require("noitavariablestore")
-local testx = stringstore.create_store(stringstore.noita.variable_storage_components(1))
+local testx = stringstore.open_store(stringstore.noita.variable_storage_components(1))
 
 testx[1] = 3
 testx[2] = 2

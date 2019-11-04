@@ -14,25 +14,27 @@ function stringstore.convert_from_string(target_type, key, storeinfo)
 	if target_type == "string" then return storeinfo.get(key) end
 	if target_type == "number" then return tonumber(storeinfo.get(key)) end
 	if target_type == "table" then
-		return stringstore.create_store(storeinfo, storeinfo.get_sub_prefix(key))
+		return stringstore.open_store(storeinfo, key, storeinfo.get_sub_prefix(key))
 	end
 	if target_type == "boolean" then return storeinfo.get(key) == "true" end
 	error("Unsupported target type: " .. target_type)
 end
 
-function stringstore.create_store(storeinfo, base_key)
+function stringstore.open_store(storeinfo, base_key, key_prefix)
 	if not storeinfo.set_type then error("Missing storeinfo 'set_type' field") end
 	if not storeinfo.set then error("Missing storeinfo 'set' field") end	
 	if not storeinfo.get_type then error("Missing storeinfo 'get_type' field") end
 	if not storeinfo.get then error("Missing storeinfo 'get' field") end
+
+	if not base_key then base_key = "" end
 
 	return setmetatable({},
 	{
 		__newindex = function(self, key, val)
 			storeinfo.restrict(tostring(key))
 			key = storeinfo.get_typed_key(key, type(key))
-			if base_key then
-				key = base_key .. key
+			if key_prefix then
+				key = key_prefix .. key
 			end
 			local val_type = type(val)
 			storeinfo.set_type(key, val_type)
@@ -49,8 +51,8 @@ function stringstore.create_store(storeinfo, base_key)
 		__index = function(self, key)
 			storeinfo.restrict(tostring(key))
 			key = storeinfo.get_typed_key(key, type(key))
-			if base_key then
-				key = base_key .. key
+			if key_prefix then
+				key = key_prefix .. key
 			end
 			local val_type = storeinfo.get_type(key)
 			if (val_type == nil) then return nil end

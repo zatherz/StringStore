@@ -14,7 +14,7 @@ In one LuaState:
 dofile("mods/my_mod/files/stringstore/stringstore.lua")
 dofile("mods/my_mod/files/stringstore/noitaglobalstore.lua")
 
-local MY_EXTERN_GLOBAL = stringstore.create_store(stringstore.noita.globals)
+local MY_EXTERN_GLOBAL = stringstore.open_store(stringstore.noita.global("MY_EXTERN_GLOBAL"))
 
 MY_EXTERN_GLOBAL.some_numeric_field = 123
 MY_EXTERN_GLOBAL.subtable = {}
@@ -29,7 +29,7 @@ In another LuaState:
 dofile("mods/my_mod/files/stringstore/stringstore.lua")
 dofile("mods/my_mod/files/stringstore/noitaglobalstore.lua")
 
-local MY_EXTERN_GLOBAL = stringstore.create_store(stringstore.noita.globals)
+local MY_EXTERN_GLOBAL = stringstore.open_store(stringstore.noita.global("MY_EXTERN_GLOBAL"))
 
 print(type(MY_EXTERN_GLOBAL.subtable.x)) --> "number"
 print(MY_EXTERN_GLOBAL.subtable.x) --> 123
@@ -58,5 +58,5 @@ Included Interfaces
 
 StringStore comes with two implementations:
 
-* `noitaglobalstore.lua` - `stringstore.noita.globals` - uses the `Globals` API in Noita to store the table
+* `noitaglobalstore.lua` - `stringstore.noita.global(global_var_name)` - uses the `Globals` API in Noita to store the table
 * `noitavariablestore.lua` - `stringstore.noita.variable_storage_components(entity_id)` - uses `VariableStorageComponent`s on a particular Entity in Noita to store the table

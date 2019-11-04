@@ -1,33 +1,41 @@
 stringstore.noita = stringstore.noita or {}
 
-stringstore.noita.globals = {
-	set_type = function(key, val)
-		GlobalsSetValue(key .. ".type", val)
-	end,
+stringstore.noita.global = function(base_name)
+	GlobalsSetValue(base_name, "<managed by stringstore>")
 
-	set = function(key, val)
-		GlobalsSetValue(key, val)
-	end,
+	return {
+		set_type = function(key, val)
+			GlobalsSetValue(base_name .. "." .. key .. ".type", val)
+		end,
 
-	get_type = function(key, val)
-		return GlobalsGetValue(key .. ".type")
-	end,
+		set = function(key, val)
+			GlobalsSetValue(base_name .. "." .. key, val)
+		end,
 
-	get = function(key)
-		return GlobalsGetValue(key)
-	end,
+		get_type = function(key, val)
+			return GlobalsGetValue(base_name .. "." .. key .. ".type")
+		end,
 
-	get_sub_prefix = function(key)
-		return key .. ".idx."
-	end,
+		get = function(key)
+			return GlobalsGetValue(base_name .. "." .. key)
+		end,
 
-	get_typed_key = function(key, type)
-		return key .. ":" .. type
-	end,
+		get_sub_prefix = function(key)
+			return key .. ".idx."
+		end,
 
-	restrict = function(key)
-		if key:find("\\.") or key:find(":") then
-			error("Cannot use the dot ('.') character or the colon character (':') in the Globals stringstore")
+		get_typed_key = function(key, type)
+			return key .. ":" .. type
+		end,
+
+		get_len_key = function(key)
+			return key .. ".len"
+		end,
+
+		restrict = function(key)
+			if key:find("\\.") or key:find(":") then
+				error("Cannot use the dot ('.') character or the colon character (':') in the Globals stringstore")
+			end
 		end
-	end
-}
+	}
+end
