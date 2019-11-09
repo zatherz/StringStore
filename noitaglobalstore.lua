@@ -13,7 +13,12 @@ stringstore.noita.global = function(base_name)
 		end,
 
 		get_type = function(key, val)
-			return GlobalsGetValue(base_name .. "." .. key .. ".type")
+			local stored_type = GlobalsGetValue(base_name .. "." .. key .. ".type")
+			if stored_type == "" then
+				return nil
+			else
+				return stored_type
+			end
 		end,
 
 		get = function(key)
