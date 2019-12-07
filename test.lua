@@ -70,7 +70,11 @@ function EntityGetComponent(entity_id, comp_name)
 			table.insert(comp_ids, v)
 		end
 	end
-	return comp_ids
+	if #comp_ids == 0 then
+		return nil
+	else
+		return comp_ids
+	end
 end
 
 print("")

@@ -24,10 +24,12 @@ function stringstore.noita.variable_storage_components(entity_id)
 
 	local storage_cache = {}
 
-	for i, v in ipairs(components) do
-		local name = ComponentGetValue(v, "name")
+	if components ~= nil then
+		for i, v in ipairs(components) do
+			local name = ComponentGetValue(v, "name")
 
-		storage_cache[name] = v
+			storage_cache[name] = v
+		end
 	end
 
 	return {
